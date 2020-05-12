@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Flash Card App</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" href="src/css/main.css">
+	<link rel="stylesheet" type="text/css" href="src/css/flipCard.css">
+</head>
+<body>
+
+	<div class="contanier">
+		<div class="page1" v-if="page1">
+	 		<div class="columns">
+			  <div class="column col-6 col-xs-12">
+			  	
+			  	<div class="panel">
+				  <div class="panel-header">
+				    <div class="panel-title"><h4>Add Flash Card</h4></div>
+				  </div>
+				  <div class="panel-body">
+				    
+				  	<div class="form-group">
+					  <label class="form-label" for="input-example-1">Question</label>
+					  <input class="form-input" v-model="question" type="text" id="input-example-1" placeholder="Enter Question Here">
+					  <br>
+					  <label class="form-label" for="input-example-1">Answer (Text)</label>
+					  <input class="form-input" v-model="answerText" type="text" id="answerText" placeholder="Enter Answer Here">
+					  <div class="divider text-center" data-content="OR"></div>
+					  <label class="form-label" for="input-example-1">Answer (URL Image)</label>
+					  <input class="form-input" v-model="answerImgUrl" type="text" id="answerImgUrl" placeholder="Enter Image URL Here">
+					  <div class="divider text-center" data-content="OR"></div>
+					  <label class="form-label" for="input-example-1">Answer (Insert Image)</label>
+					  <input class="form-input" type="file" v-on:change="file">
+					</div>
+
+				  </div>
+				  <div class="panel-footer">
+				    <button class="btn btn-block" v-bind:class="addCardBtn" v-on:click="addCard">Add Flash Card</button>
+				  </div>
+				</div>
+
+			  </div>
+			  <div class="column col-6 col-xs-12">
+			  	
+			  	<div class="panel">
+				  <div class="panel-header">
+
+				    <div class="panel-title"><h4>Flash Cards</h4></div>
+				  </div>
+				  <div class="panel-body">
+				    <div class="list">
+				    	<div class="card" v-for="(card,index) in cards">
+				    		<div class="card-header" v-if="card.answer.search('https:') == 0">{{card.question}} : Image(URL) <button class="btn btn-action float-right s-circle" v-on:click="deleteCard(card.id,index)"><i class="material-icons">clear</i></button></div>
+				    		<div class="card-header" v-else-if="card.answer.search('data:image/') == 0">{{card.question}} : Image(Insert) <button class="btn btn-action float-right s-circle" v-on:click="deleteCard(card.id,index)"><i class="material-icons">clear</i></button></div>
+				    		<div class="card-header" v-else>{{card.question}} : {{card.answer}} <button class="btn btn-action float-right s-circle" v-on:click="deleteCard(card.id,index)"><i class="material-icons">clear</i></button></div>
+				    	</div>
+				    </div>
+				  </div>
+				  <div class="panel-footer">
+				    <button class="btn btn-block btn-success" v-bind:class="createGroupBtn" v-on:click="createGroup()">Create Group</button>
+				  </div>
+				</div>
+
+			  </div>
+			</div>
+		</div>
+		<div class="page2" v-if="page2">
+			<div class="cards-container">
+				<div class="card-container" v-for="(card,index) in cards">
+					<div class="card" v-if="index+1 == controlId">
+						<div class="front">
+							<h1>{{card.question}}</h1>
+						</div>
+						<div class="back" v-if="card.answer.search('https://') == 0 || card.answer.search('data:image/') == 0">
+							<img v-bind:src="card.answer" alt="">
+						</div>
+						<div class="back" v-else>
+							<h1>{{card.answer}}</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="buttons">
+				<div class="menus">
+					<button class="btn btn-action active float-left" v-on:click="prevMenu()"><i class="material-icons">add</i></button>
+					<button class="btn btn-action active float-right" v-on:click="shuffle()"><i class="material-icons">shuffle</i></button>
+				</div>
+				<div class="controller">
+					<button class="btn btn-action s-circle float-left active" v-on:click="prev()"><i class="material-icons md-48">keyboard_arrow_left</i></button>
+					<button class="btn btn-action s-circle float-right active" v-on:click="next()"><i class="material-icons md-48">keyboard_arrow_right</i></button>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</body>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://code.jquery.com/jquery-3.5.0.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="src/js/main.js"></script>
+</html>
